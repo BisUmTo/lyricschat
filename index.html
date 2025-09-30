@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ossigeno Chatbot</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <section class="chat-shell" aria-label="Chatbot Ossigeno">
+    <header class="chat-header">
+      <div class="chat-header__avatar" aria-hidden="true">O₂</div>
+      <div class="chat-header__meta">
+        <span>Ossigeno</span>
+        <span class="chat-header__status" id="headerStatus">Carico i versi…</span>
+      </div>
+    </header>
+
+    <div class="chat-messages" id="scroller">
+      <ol id="messages" class="message-list" aria-live="polite" aria-atomic="false"></ol>
+      <div id="typing" class="message message--bot typing" aria-hidden="true">
+        <div class="message__bubble">
+          <span class="typing-dots" aria-hidden="true">
+            <span></span><span></span><span></span>
+          </span>
+          <span class="message__meta">sta scrivendo…</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="chat-composer">
+      <form id="composer" autocomplete="off">
+        <input id="composerInput" class="chat-input" type="text" name="message" placeholder="Scrivi un messaggio" aria-label="Scrivi un messaggio" />
+        <button type="submit" class="chat-send" aria-label="Invia messaggio" disabled>➤</button>
+      </form>
+    </div>
+  </section>
+
+  <script type="module" src="script.js"></script>
+</body>
+</html>
