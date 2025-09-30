@@ -8,6 +8,11 @@
   --header-fg: #e8f5f3;
   --text-color: #0f161a;
   --muted: #6c757d;
+  --viewport-height: 100vh;
+  --viewport-offset-top: 0px;
+  --viewport-offset-bottom: 0px;
+  --safe-area-top: env(safe-area-inset-top, 0px);
+  --safe-area-bottom: env(safe-area-inset-bottom, 0px);
   font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, sans-serif;
 }
 
@@ -26,12 +31,13 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  /*padding: 24px;*/
+  padding: clamp(12px, 4vw, 24px);
+  min-height: var(--viewport-height);
 }
 
 .chat-shell {
   width: min(var(--app-max-width), 100%);
-  height: min(720px, 92vh);
+  height: min(720px, var(--viewport-height));
   border-radius: 24px;
   overflow: hidden;
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.48);
@@ -44,7 +50,7 @@ body {
 .chat-header {
   background: var(--header-bg);
   color: var(--header-fg);
-  padding: 18px;
+  padding: calc(18px + var(--safe-area-top)) 18px 18px;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -78,7 +84,7 @@ body {
 .chat-messages {
   flex: 1;
   background: var(--chat-bg);
-  padding: 24px 16px 12px;
+  padding: 24px 16px calc(12px + var(--safe-area-bottom));
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -146,7 +152,6 @@ body {
   gap: 6px;
   align-items: center;
   margin-top: 4px;
-  padding-left: 6px;
 }
 
 .message--user .message__meta {
@@ -194,7 +199,7 @@ body {
 
 .chat-composer {
   background: #0d1f24;
-  padding: 14px;
+  padding: 14px 14px calc(14px + var(--safe-area-bottom));
   display: flex;
   align-items: center;
   gap: 10px;
@@ -255,13 +260,29 @@ body {
   transform: none;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 600px) {
+  html, body {
+    height: auto;
+  }
+
   body {
-    /*padding: 12px;*/
+    padding: 0;
+    align-items: stretch;
+    justify-content: flex-start;
+    min-height: 100%;
   }
 
   .chat-shell {
-    height: 100vh;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: var(--viewport-offset-top);
+    bottom: var(--viewport-offset-bottom);
+    width: 100%;
+    max-width: none;
+    height: auto;
     border-radius: 0;
+    border: none;
+    box-shadow: none;
   }
 }

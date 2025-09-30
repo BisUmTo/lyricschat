@@ -4,7 +4,36 @@ env.allowRemoteModels = true;
 env.allowLocalModels = false;
 env.useBrowserCache = true;
 
+initViewportSizing();
 typeset();
+
+function initViewportSizing() {
+  const docEl = document.documentElement;
+
+  function applyViewportMetrics() {
+    const viewport = window.visualViewport;
+    const height = viewport ? viewport.height : window.innerHeight;
+    const offsetTop = viewport ? viewport.offsetTop : 0;
+    const offsetBottom = viewport
+      ? Math.max(0, window.innerHeight - viewport.height - viewport.offsetTop)
+      : 0;
+
+    docEl.style.setProperty('--viewport-height', `${height}px`);
+    docEl.style.setProperty('--viewport-offset-top', `${offsetTop}px`);
+    docEl.style.setProperty('--viewport-offset-bottom', `${offsetBottom}px`);
+  }
+
+  applyViewportMetrics();
+
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', applyViewportMetrics);
+    window.visualViewport.addEventListener('scroll', applyViewportMetrics);
+  } else {
+    window.addEventListener('resize', applyViewportMetrics);
+  }
+
+  window.addEventListener('orientationchange', applyViewportMetrics);
+}
 
 function typeset() {
   const scroller = document.getElementById('scroller');
@@ -179,7 +208,7 @@ function typeset() {
     }
     const text = await response.text();
     return text
-      .split(/\r?\n/) // gestione CRLF/LF
+      .split(/\r?\n/)
       .map(line => line.trim())
       .filter(Boolean);
   }
@@ -187,7 +216,7 @@ function typeset() {
   async function warmupEmbeddings() {
     try {
       statusEl.textContent = 'Carico il modello di embedding…';
-      embedder = await pipeline('feature-extraction', 'Snowflake/snowflake-arctic-embed-m');
+      embedder = await pipeline('feature-extraction', 'Snowflake/snowflake-arctic-embed-l-v2.0');
       statusEl.textContent = 'Indicizzo i versi…';
       verseEmbeddings = [];
       for (let i = 0; i < OPTIONS.length; i++) {
